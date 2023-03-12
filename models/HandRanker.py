@@ -13,22 +13,44 @@ class HandRanker:
         self.hand: list[Card] = hand
         self.is_hand_flush: bool = False
         self.is_hand_straight: bool = False
-        self.rank_histogram: list[int] = []        
+        self.rank_histogram: list[int] = []
+        self.highest_rank: str = ""
+        self.hand_rank: str = ""
+
+    def update_hand_stats(self) -> None:
+        self.is_hand_flush = self._is_flush()
+        self.is_hand_straight = self._is_straight()
+        self.rank_histogram = self._generate_rank_histogram()
+        self.highest_rank = self.get_highest_rank(self.hand)
  
-    def is_flush(self) -> bool:
+    def _is_flush(self) -> bool:
         hand_suits = [card.suit for card in self.hand]
         return len(set(hand_suits)) == 1
 
-    def is_straight(self) -> bool:
+    def _is_straight(self) -> bool:
         rank_order = ['a'] + [member.value for member in Rank]
         HAND_SIZE = 5
         valid_straights = [set(rank_order[i: i + HAND_SIZE]) for i in range(len(rank_order) - HAND_SIZE + 1)]
         ranks = [card.rank for card in self.hand]
         return set(ranks) in valid_straights
     
-    def generate_rank_histogram(self) -> list[int]:
+    def _generate_rank_histogram(self) -> list[int]:
         ranks = [card.rank for card in self.hand]
         return [count for count in Counter(ranks).values()]
+    
+    @staticmethod
+    def get_highest_rank(cards: list[Card]) -> str:
+        rank_order = [member.value for member in Rank]
+        ranks = [card.rank for card in cards]
+        max_idx = 0
+        for rank in ranks:
+            max_idx = max(max_idx, rank_order.index(rank))
+        return rank_order[max_idx]
+
+    def get_hand_rank(self) -> str:
+        if not (self.rank_histogram and self.highest_rank):
+            raise Exception('Hand stats not initialised')
+        
 
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running numbers from A - T
