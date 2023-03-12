@@ -50,3 +50,11 @@ def test_handranker_is_straight_returns_false_when_ranks_not_consecutive():
     assert HandRanker(generate_cards(['ac', 'jh', 'ks', 'qc', '2d'])).is_straight() == False
     assert HandRanker(generate_cards(['ac', '3h', 'ks', 'qc', '2d'])).is_straight() == False
     assert HandRanker(generate_cards(['9c', '9h', '8s', 'qc', 'td'])).is_straight() == False
+
+def test_handranker_generate_rank_histogram_generates_correctly():
+    assert HandRanker(generate_cards(['2c', '3h', '4s', '5c', '6d'])).generate_rank_histogram() == [1, 1, 1, 1, 1]
+    assert HandRanker(generate_cards(['2c', '2h', '4s', '5c', '6d'])).generate_rank_histogram() == [2, 1, 1, 1]
+    assert HandRanker(generate_cards(['2c', '2h', '4s', '4c', '6d'])).generate_rank_histogram() == [2, 2, 1]
+    assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '6d'])).generate_rank_histogram() == [3, 1, 1]
+    assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '5d'])).generate_rank_histogram() == [3, 2]
+    assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '2d'])).generate_rank_histogram() == [4, 1]

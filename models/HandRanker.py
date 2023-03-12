@@ -1,5 +1,7 @@
+from collections import Counter
 from models.Card import Card
 from models.Rank import Rank
+
 class HandRanker:
     def __init__(self, hand: list[Card]) -> None:
         if len(hand) != 5:
@@ -23,6 +25,10 @@ class HandRanker:
         valid_straights = [set(rank_order[i: i + HAND_SIZE]) for i in range(len(rank_order) - HAND_SIZE + 1)]
         ranks = [card.rank for card in self.hand]
         return set(ranks) in valid_straights
+    
+    def generate_rank_histogram(self) -> list[int]:
+        ranks = [card.rank for card in self.hand]
+        return [count for count in Counter(ranks).values()]
 
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running numbers from A - T
