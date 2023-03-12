@@ -36,7 +36,7 @@ class HandRanker:
     
     def _generate_rank_histogram(self) -> list[int]:
         ranks = [card.rank for card in self.hand]
-        return [count for count in Counter(ranks).values()]
+        return sorted([count for count in Counter(ranks).values()], reverse=True)
     
     @staticmethod
     def get_highest_rank(cards: list[Card]) -> str:
@@ -51,7 +51,35 @@ class HandRanker:
         if not (self.rank_histogram and self.highest_rank):
             raise Exception('Hand stats not initialised')
         
+        if self.is_hand_flush and self.is_hand_straight and self.highest_rank == 'a':
+            return "Royal_Flush"
+        
+        elif self.is_hand_flush and self.is_hand_straight:
+            return "Straight_Flush"
+        
+        elif self.rank_histogram == [4, 1]:
+            return "4_of_a_Kind"
+        
+        elif self.rank_histogram == [3, 2]:
+            return "Full_House"
 
+        elif self.is_hand_flush:
+            return "Flush"
+        
+        elif self.is_hand_straight:
+            return "Straight"
+        
+        elif self.rank_histogram == [3, 1, 1]:
+            return "3_of_a_Kind"
+        
+        elif self.rank_histogram == [2, 2, 1]:
+            return "2_Pairs"
+        
+        elif self.rank_histogram == [2, 1, 1, 1]:
+            return "Pair"
+        
+        else:
+            return "High_Card"
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running numbers from A - T
 # Straight Flush - Flush + straight
