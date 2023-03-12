@@ -19,12 +19,3 @@ class Card:
 
     def __repr__(self) -> str:
         return f'{self.rank}{self.suit}'
-    
-    def __members(self) -> tuple[str]:
-        return (self.rank, self.suit)
-
-    def __eq__(self, other) -> bool:
-        return self.__members() == other.__members()
-    
-    def __hash__(self) -> int:
-        return hash(self.__members())
