@@ -1,5 +1,4 @@
 import random
-from typing import List
 from models.Card import Card
 from models.Constants import CARD_SUITS, CARD_RANKS
 
@@ -7,7 +6,7 @@ class Deck:
     def __init__(self) -> None:
         self.cards = [Card(r, s) for r in CARD_RANKS for s in CARD_SUITS]
 
-    def get_cards(self) -> List[Card]:
+    def get_cards(self) -> list[Card]:
         return self.cards.copy()
 
     def size(self) -> int:
