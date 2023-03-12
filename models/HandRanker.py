@@ -1,17 +1,21 @@
-from typing import List
 from models.Card import Card
 
 class HandRanker:
-    def __init__(self, hand: List[Card]) -> None:
+    def __init__(self, hand: list[Card]) -> None:
         if len(hand) != 5:
             raise ValueError(f'Hand must contain 5 cards, got {len(hand)}')
         cards_repr = [repr(card) for card in hand]
         if len(set(cards_repr)) != len(hand):
             raise ValueError(f'Cards passed in are not unique, got {cards_repr}')
 
-        self.hand = hand
-
-
+        self.hand: list[Card] = hand
+        self.is_hand_flush: bool = False
+        self.is_hand_straight: bool = False
+        self.rank_histogram: list[int] = []        
+ 
+    def is_flush(self) -> bool:
+        hand_suits = [card.suit for card in self.hand]
+        return len(set(hand_suits)) == 1
 
 
 
