@@ -1,5 +1,5 @@
 from models.Card import Card
-
+from models.Rank import Rank
 class HandRanker:
     def __init__(self, hand: list[Card]) -> None:
         if len(hand) != 5:
@@ -17,7 +17,12 @@ class HandRanker:
         hand_suits = [card.suit for card in self.hand]
         return len(set(hand_suits)) == 1
 
-
+    def is_straight(self) -> bool:
+        rank_order = ['a'] + [member.value for member in Rank]
+        HAND_SIZE = 5
+        valid_straights = [set(rank_order[i: i + HAND_SIZE]) for i in range(len(rank_order) - HAND_SIZE + 1)]
+        ranks = [card.rank for card in self.hand]
+        return set(ranks) in valid_straights
 
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running numbers from A - T
