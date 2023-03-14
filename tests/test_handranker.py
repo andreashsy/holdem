@@ -1,5 +1,6 @@
 import pytest
 from models.HandRanker import HandRanker
+from models.HandRank import HandRank
 from models.CardGenerator import generate_cards
 
 def test_handranker_raises_error_when_not_initialized_with_5_cards():
@@ -227,3 +228,73 @@ def test_handranker_get_hand_rank_returns_royal_flush_correctly():
     hr_royal_flush.update_hand_stats()
     
     assert hr_royal_flush.get_hand_rank() == "ROYAL_FLUSH"
+
+def test_handranker_update_hand_stats_generates_high_card_enum_correctly():
+    hr_highcard = HandRanker(generate_cards(['2c', '3h', '4s', '5c', '7d']))
+
+    hr_highcard.update_hand_stats()
+    
+    assert hr_highcard.hand_rank == HandRank.HIGH_CARD
+
+def test_handranker_update_hand_stats_generates_pair_enum_correctly():
+    hr_pair = HandRanker(generate_cards(['2c', '2h', '4s', '5c', '7d']))
+
+    hr_pair.update_hand_stats()
+    
+    assert hr_pair.hand_rank == HandRank.PAIR
+
+def test_handranker_update_hand_stats_generates_2_pairs_enum_correctly():
+    hr_2_pairs = HandRanker(generate_cards(['2c', '2h', '5s', '5c', '7d']))
+
+    hr_2_pairs.update_hand_stats()
+    
+    assert hr_2_pairs.hand_rank == HandRank.TWO_PAIRS
+
+def test_handranker_update_hand_stats_generates_3_of_a_kind_enum_correctly():
+    hr_3_of_a_kind = HandRanker(generate_cards(['2c', '2h', '2s', '5c', '7d']))
+
+    hr_3_of_a_kind.update_hand_stats()
+    
+    assert hr_3_of_a_kind.hand_rank == HandRank.THREE_OF_A_KIND
+
+def test_handranker_update_hand_stats_generates_straight_enum_correctly():
+    hr_straight = HandRanker(generate_cards(['2c', '3h', '4s', '5c', '6d']))
+
+    hr_straight.update_hand_stats()
+    
+    assert hr_straight.hand_rank == HandRank.STRAIGHT
+
+def test_handranker_update_hand_stats_generates_flush_enum_correctly():
+    hr_flush = HandRanker(generate_cards(['2c', '3c', '4c', '5c', '7c']))
+
+    hr_flush.update_hand_stats()
+    
+    assert hr_flush.hand_rank == HandRank.FLUSH
+
+def test_handranker_update_hand_stats_generates_full_house_enum_correctly():
+    hr_full_house = HandRanker(generate_cards(['2c', '2h', '2s', '7c', '7d']))
+
+    hr_full_house.update_hand_stats()
+    
+    assert hr_full_house.hand_rank == HandRank.FULL_HOUSE
+
+def test_handranker_update_hand_stats_generates_4_of_a_kind_enum_correctly():
+    hr_4_of_a_kind = HandRanker(generate_cards(['2c', '2h', '2s', '5c', '2d']))
+
+    hr_4_of_a_kind.update_hand_stats()
+    
+    assert hr_4_of_a_kind.hand_rank == HandRank.FOUR_OF_A_KIND
+
+def test_handranker_update_hand_stats_generates_straight_flush_enum_correctly():
+    hr_straight_flush = HandRanker(generate_cards(['2c', '3c', '4c', '5c', '6c']))
+
+    hr_straight_flush.update_hand_stats()
+    
+    assert hr_straight_flush.hand_rank == HandRank.STRAIGHT_FLUSH
+
+def test_handranker_update_hand_stats_generates_royal_flush_enum_correctly():
+    hr_royal_flush = HandRanker(generate_cards(['ac', 'jc', 'kc', 'tc', 'qc']))
+
+    hr_royal_flush.update_hand_stats()
+    
+    assert hr_royal_flush.hand_rank == HandRank.ROYAL_FLUSH

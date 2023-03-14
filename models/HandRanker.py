@@ -1,6 +1,7 @@
 from collections import Counter
 from models.Card import Card
 from models.Rank import Rank
+from models.HandRank import HandRank
 
 class HandRanker:
     def __init__(self, hand: list[Card]) -> None:
@@ -15,13 +16,14 @@ class HandRanker:
         self.is_hand_straight: bool = False
         self.rank_histogram: list[int] = []
         self.highest_rank: str = ""
-        self.hand_rank: str = ""
+        self.hand_rank: HandRank = None
 
     def update_hand_stats(self) -> None:
         self.is_hand_flush = self._is_flush()
         self.is_hand_straight = self._is_straight()
         self.rank_histogram = self._generate_rank_histogram()
         self.highest_rank = self.get_highest_rank(self.hand)
+        self.hand_rank = HandRank[self.get_hand_rank()]
  
     def _is_flush(self) -> bool:
         hand_suits = [card.suit for card in self.hand]
