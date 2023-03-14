@@ -52,36 +52,28 @@ class HandRanker:
             raise Exception('Hand stats not initialised')
         
         if self.is_hand_flush and self.is_hand_straight and self.highest_rank == 'a':
-            return "Royal_Flush"
-        
+            return "ROYAL_FLUSH"
         elif self.is_hand_flush and self.is_hand_straight:
-            return "Straight_Flush"
-        
+            return "STRAIGHT_FLUSH"
         elif self.rank_histogram == [4, 1]:
-            return "4_of_a_Kind"
-        
+            return "FOUR_OF_A_KIND"
         elif self.rank_histogram == [3, 2]:
-            return "Full_House"
-
+            return "FULL_HOUSE"
         elif self.is_hand_flush:
-            return "Flush"
-        
+            return "FLUSH"
         elif self.is_hand_straight:
-            return "Straight"
-        
+            return "STRAIGHT"
         elif self.rank_histogram == [3, 1, 1]:
-            return "3_of_a_Kind"
-        
+            return "THREE_OF_A_KIND"
         elif self.rank_histogram == [2, 2, 1]:
-            return "2_Pairs"
-        
+            return "TWO_PAIRS"
         elif self.rank_histogram == [2, 1, 1, 1]:
-            return "Pair"
-        
+            return "PAIR"
         else:
-            return "High_Card"
+            return "HIGH_CARD"
+        
 # Poker hand strengths in order, from best to worst - 
-# Royal Flush - Same suit, running numbers from A - T
+# Royal Flush - Same suit, running rank from A - T
 # Straight Flush - Flush + straight
 # 4 of a kind - 4 cards of same rank
 # Full house - 3 cards of same rank + pair
