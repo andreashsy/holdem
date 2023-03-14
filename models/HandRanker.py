@@ -23,7 +23,7 @@ class HandRanker:
         self.is_hand_straight = self._is_straight()
         self.rank_histogram = self._generate_rank_histogram()
         self.highest_rank = self.get_highest_rank(self.hand)
-        self.hand_rank = HandRank[self.get_hand_rank()]
+        self.hand_rank = self.get_hand_rank()
  
     def _is_flush(self) -> bool:
         hand_suits = [card.suit for card in self.hand]
@@ -49,30 +49,30 @@ class HandRanker:
             max_idx = max(max_idx, rank_order.index(rank))
         return rank_order[max_idx]
 
-    def get_hand_rank(self) -> str:
+    def get_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
             raise Exception('Hand stats not initialised')
         
         if self.is_hand_flush and self.is_hand_straight and self.highest_rank == 'a':
-            return "ROYAL_FLUSH"
+            return HandRank.ROYAL_FLUSH
         elif self.is_hand_flush and self.is_hand_straight:
-            return "STRAIGHT_FLUSH"
+            return HandRank.STRAIGHT_FLUSH
         elif self.rank_histogram == [4, 1]:
-            return "FOUR_OF_A_KIND"
+            return HandRank.FOUR_OF_A_KIND
         elif self.rank_histogram == [3, 2]:
-            return "FULL_HOUSE"
+            return HandRank.FULL_HOUSE
         elif self.is_hand_flush:
-            return "FLUSH"
+            return HandRank.FLUSH
         elif self.is_hand_straight:
-            return "STRAIGHT"
+            return HandRank.STRAIGHT
         elif self.rank_histogram == [3, 1, 1]:
-            return "THREE_OF_A_KIND"
+            return HandRank.THREE_OF_A_KIND
         elif self.rank_histogram == [2, 2, 1]:
-            return "TWO_PAIRS"
+            return HandRank.TWO_PAIRS
         elif self.rank_histogram == [2, 1, 1, 1]:
-            return "PAIR"
+            return HandRank.PAIR
         else:
-            return "HIGH_CARD"
+            return HandRank.HIGH_CARD
         
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running rank from A - T
