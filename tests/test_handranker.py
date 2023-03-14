@@ -1,7 +1,6 @@
-from models.HandRanker import HandRanker
-from models.Card import Card
-from models.CardGenerator import generate_cards
 import pytest
+from models.HandRanker import HandRanker
+from models.CardGenerator import generate_cards
 
 def test_handranker_raises_error_when_not_initialized_with_5_cards():
     card1, card2, card3, card4, card5, card6 = generate_cards(['2h', '3d', '4d', '5d', '6d', '7d'])

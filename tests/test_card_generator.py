@@ -1,6 +1,6 @@
-from models.CardGenerator import generate_cards
-from models.Card import Card
 import pytest
+from models.Card import Card
+from models.CardGenerator import generate_cards
 
 def test_generate_cards_empty_list_returns_empty_list():
     assert generate_cards([]) == []   
