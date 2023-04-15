@@ -1,7 +1,10 @@
 from collections import Counter
+from typing import Callable
+
 from models.Card import Card
 from models.Rank import Rank
 from models.HandRank import HandRank
+from models.HandRankTieBreaker import get_tie_break_values_high_card
 
 class HandRanker:
     def __init__(self, hand: list[Card]) -> None:
@@ -18,11 +21,14 @@ class HandRanker:
         self.highest_rank: str = ""
         self.hand_rank: HandRank = None
 
+    def get_hand_rank(self) -> HandRank:
+        return self.hand_rank
+
     def update_hand_stats(self) -> None:
         self.is_hand_flush = self._is_flush()
         self.is_hand_straight = self._is_straight()
         self.rank_histogram = self._generate_rank_histogram()
-        self.highest_rank = self.get_highest_rank(self.hand)
+        self.highest_rank = self.find_highest_rank(self.hand)
         self.hand_rank = self.calculate_hand_rank()
  
     def _is_flush(self) -> bool:
@@ -31,8 +37,8 @@ class HandRanker:
 
     def _is_straight(self) -> bool:
         rank_order = ['a'] + [member.value for member in Rank]
-        HAND_SIZE = 5
-        valid_straights = [set(rank_order[i: i + HAND_SIZE]) for i in range(len(rank_order) - HAND_SIZE + 1)]
+        hand_size = len(self.hand)
+        valid_straights = [set(rank_order[i: i + hand_size]) for i in range(len(rank_order) - hand_size + 1)]
         ranks = [card.rank for card in self.hand]
         return set(ranks) in valid_straights
     
@@ -41,13 +47,16 @@ class HandRanker:
         return sorted([count for count in Counter(ranks).values()], reverse=True)
     
     @staticmethod
-    def get_highest_rank(cards: list[Card]) -> str:
+    def find_highest_rank(cards: list[Card]) -> str:
         rank_order = [member.value for member in Rank]
         ranks = [card.rank for card in cards]
         max_idx = 0
         for rank in ranks:
             max_idx = max(max_idx, rank_order.index(rank))
         return rank_order[max_idx]
+    
+    def _calculate_tie_break_value(self) -> float:
+        return TIE_BREAKER_MAP[self.get_hand_rank](self.hand)
 
     def calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
@@ -74,7 +83,13 @@ class HandRanker:
         else:
             return HandRank.HIGH_CARD
 
-# TODO: add tie breaker class which returns  decimals 
+HandRankTieBreakerCalculator = Callable[[list[Card]], float]
+
+TIE_BREAKER_MAP: dict[HandRank, HandRankTieBreakerCalculator] = {
+    HandRank.HIGH_CARD: get_tie_break_values_high_card,
+}
+
+# TODO: add tie breaker returns decimals 
 
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running rank from A - T

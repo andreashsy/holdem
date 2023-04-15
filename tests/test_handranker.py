@@ -59,11 +59,11 @@ def test_handranker_generate_rank_histogram_generates_correctly():
     assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '5d']))._generate_rank_histogram() == [3, 2]
     assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '2d']))._generate_rank_histogram() == [4, 1]
 
-def test_handranker_get_highest_rank_generates_correctly():
-    assert HandRanker.get_highest_rank(generate_cards(['2c', '2h', '2s', '5c', '2d'])) == '5'
-    assert HandRanker.get_highest_rank(generate_cards(['2c', '2h', 'ts', '5c', '2d'])) == 't'
-    assert HandRanker.get_highest_rank(generate_cards(['2c', 'ah', 'as', '5c', '2d'])) == 'a'
-    assert HandRanker.get_highest_rank(generate_cards(['2c', 'jh', 'ts', 'jc', 'jd'])) == 'j'
+def test_handranker_find_highest_rank_generates_correctly():
+    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', '2s', '5c', '2d'])) == '5'
+    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', 'ts', '5c', '2d'])) == 't'
+    assert HandRanker.find_highest_rank(generate_cards(['2c', 'ah', 'as', '5c', '2d'])) == 'a'
+    assert HandRanker.find_highest_rank(generate_cards(['2c', 'jh', 'ts', 'jc', 'jd'])) == 'j'
 
 def test_handranker_update_hand_stats_highcard_generates_correctly():
     hr_flush = HandRanker(generate_cards(['3c', '4d', '5c', '6c', '9c']))
