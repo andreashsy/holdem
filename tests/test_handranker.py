@@ -155,76 +155,76 @@ def test_handranker_update_hand_stats_4_of_a_kind_generates_correctly():
     assert hr_4_kind.rank_histogram == [4, 1]
     assert hr_4_kind.highest_rank == '5'
 
-def test_handranker_get_hand_rank_throws_error_if_stats_not_updated():
+def test_handranker_calculate_hand_rank_throws_error_if_stats_not_updated():
     with pytest.raises(Exception):
-        HandRanker(generate_cards(['3c', '3h', '3s', '3d', '5c'])).get_hand_rank()
+        HandRanker(generate_cards(['3c', '3h', '3s', '3d', '5c'])).calculate_hand_rank()
 
-def test_handranker_get_hand_rank_returns_high_card_correctly():
+def test_handranker_calculate_hand_rank_returns_high_card_correctly():
     hr_highcard = HandRanker(generate_cards(['2c', '3h', '4s', '5c', '7d']))
 
     hr_highcard.update_hand_stats()
     
-    assert hr_highcard.get_hand_rank() == HandRank.HIGH_CARD
+    assert hr_highcard.calculate_hand_rank() == HandRank.HIGH_CARD
 
-def test_handranker_get_hand_rank_returns_pair_correctly():
+def test_handranker_calculate_hand_rank_returns_pair_correctly():
     hr_pair = HandRanker(generate_cards(['2c', '2h', '4s', '5c', '7d']))
 
     hr_pair.update_hand_stats()
     
-    assert hr_pair.get_hand_rank() == HandRank.PAIR
+    assert hr_pair.calculate_hand_rank() == HandRank.PAIR
 
-def test_handranker_get_hand_rank_returns_2_pairs_correctly():
+def test_handranker_calculate_hand_rank_returns_2_pairs_correctly():
     hr_2_pairs = HandRanker(generate_cards(['2c', '2h', '5s', '5c', '7d']))
 
     hr_2_pairs.update_hand_stats()
     
-    assert hr_2_pairs.get_hand_rank() == HandRank.TWO_PAIRS
+    assert hr_2_pairs.calculate_hand_rank() == HandRank.TWO_PAIRS
 
-def test_handranker_get_hand_rank_returns_3_of_a_kind_correctly():
+def test_handranker_calculate_hand_rank_returns_3_of_a_kind_correctly():
     hr_3_of_a_kind = HandRanker(generate_cards(['2c', '2h', '2s', '5c', '7d']))
 
     hr_3_of_a_kind.update_hand_stats()
     
-    assert hr_3_of_a_kind.get_hand_rank() == HandRank.THREE_OF_A_KIND
+    assert hr_3_of_a_kind.calculate_hand_rank() == HandRank.THREE_OF_A_KIND
 
-def test_handranker_get_hand_rank_returns_straight_correctly():
+def test_handranker_calculate_hand_rank_returns_straight_correctly():
     hr_straight = HandRanker(generate_cards(['2c', '3h', '4s', '5c', '6d']))
 
     hr_straight.update_hand_stats()
     
-    assert hr_straight.get_hand_rank() == HandRank.STRAIGHT
+    assert hr_straight.calculate_hand_rank() == HandRank.STRAIGHT
 
-def test_handranker_get_hand_rank_returns_flush_correctly():
+def test_handranker_calculate_hand_rank_returns_flush_correctly():
     hr_flush = HandRanker(generate_cards(['2c', '3c', '4c', '5c', '7c']))
 
     hr_flush.update_hand_stats()
     
-    assert hr_flush.get_hand_rank() == HandRank.FLUSH
+    assert hr_flush.calculate_hand_rank() == HandRank.FLUSH
 
-def test_handranker_get_hand_rank_returns_full_house_correctly():
+def test_handranker_calculate_hand_rank_returns_full_house_correctly():
     hr_full_house = HandRanker(generate_cards(['2c', '2h', '2s', '7c', '7d']))
 
     hr_full_house.update_hand_stats()
     
-    assert hr_full_house.get_hand_rank() == HandRank.FULL_HOUSE
+    assert hr_full_house.calculate_hand_rank() == HandRank.FULL_HOUSE
 
-def test_handranker_get_hand_rank_returns_4_of_a_kind_correctly():
+def test_handranker_calculate_hand_rank_returns_4_of_a_kind_correctly():
     hr_4_of_a_kind = HandRanker(generate_cards(['2c', '2h', '2s', '5c', '2d']))
 
     hr_4_of_a_kind.update_hand_stats()
     
-    assert hr_4_of_a_kind.get_hand_rank() == HandRank.FOUR_OF_A_KIND
+    assert hr_4_of_a_kind.calculate_hand_rank() == HandRank.FOUR_OF_A_KIND
 
-def test_handranker_get_hand_rank_returns_straight_flush_correctly():
+def test_handranker_calculate_hand_rank_returns_straight_flush_correctly():
     hr_straight_flush = HandRanker(generate_cards(['2c', '3c', '4c', '5c', '6c']))
 
     hr_straight_flush.update_hand_stats()
     
-    assert hr_straight_flush.get_hand_rank() == HandRank.STRAIGHT_FLUSH
+    assert hr_straight_flush.calculate_hand_rank() == HandRank.STRAIGHT_FLUSH
 
-def test_handranker_get_hand_rank_returns_royal_flush_correctly():
+def test_handranker_calculate_hand_rank_returns_royal_flush_correctly():
     hr_royal_flush = HandRanker(generate_cards(['ac', 'jc', 'kc', 'tc', 'qc']))
 
     hr_royal_flush.update_hand_stats()
     
-    assert hr_royal_flush.get_hand_rank() == HandRank.ROYAL_FLUSH
+    assert hr_royal_flush.calculate_hand_rank() == HandRank.ROYAL_FLUSH

@@ -23,7 +23,7 @@ class HandRanker:
         self.is_hand_straight = self._is_straight()
         self.rank_histogram = self._generate_rank_histogram()
         self.highest_rank = self.get_highest_rank(self.hand)
-        self.hand_rank = self.get_hand_rank()
+        self.hand_rank = self.calculate_hand_rank()
  
     def _is_flush(self) -> bool:
         hand_suits = [card.suit for card in self.hand]
@@ -49,7 +49,7 @@ class HandRanker:
             max_idx = max(max_idx, rank_order.index(rank))
         return rank_order[max_idx]
 
-    def get_hand_rank(self) -> HandRank:
+    def calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
             raise Exception('Hand stats not initialised')
         
@@ -73,7 +73,9 @@ class HandRanker:
             return HandRank.PAIR
         else:
             return HandRank.HIGH_CARD
-        
+
+# TODO: add tie breaker class which returns  decimals 
+
 # Poker hand strengths in order, from best to worst - 
 # Royal Flush - Same suit, running rank from A - T
 # Straight Flush - Flush + straight
