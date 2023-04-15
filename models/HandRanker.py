@@ -20,6 +20,7 @@ class HandRanker:
         self.rank_histogram: list[int] = []
         self.highest_rank: str = ""
         self.hand_rank: HandRank = None
+        self.tie_break_value: float = 0.0
 
     def get_hand_rank(self) -> HandRank:
         return self.hand_rank
@@ -30,6 +31,7 @@ class HandRanker:
         self.rank_histogram = self._generate_rank_histogram()
         self.highest_rank = self.find_highest_rank(self.hand)
         self.hand_rank = self.calculate_hand_rank()
+        self.tie_break_value = self._calculate_tie_break_value()
  
     def _is_flush(self) -> bool:
         hand_suits = [card.suit for card in self.hand]
@@ -56,7 +58,7 @@ class HandRanker:
         return rank_order[max_idx]
     
     def _calculate_tie_break_value(self) -> float:
-        return TIE_BREAKER_MAP[self.get_hand_rank](self.hand)
+        return TIE_BREAKER_MAP[self.hand_rank](self.hand)
 
     def calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
