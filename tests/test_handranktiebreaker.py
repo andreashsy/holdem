@@ -55,7 +55,7 @@ def test_to_rounded_decimal_position_correct_when_position_is_1():
 def test_to_rounded_decimal_position_correct_when_position_is_8():
     assert to_rounded_decimal_position(5, 8) == 0.0000000000000005
 
-# def test_get_tie_break_values_high_card_returns_correct_value():
-#     hand = generate_cards(['9c', '2h', '8s', 'qc', 'td'])
+def test_get_tie_break_values_high_card_returns_correct_value():
+    hand = generate_cards(['9c', '2h', '8s', 'qc', 'td'])
 
-#     assert get_tie_break_values_high_card(hand) == 0.1109080701
+    assert get_tie_break_values_high_card(hand) == 0.1109080701

@@ -1,7 +1,7 @@
 from models.Card import Card
 from models.Rank import Rank
+from models.Constants import RANK_VALUE_MAP
 
-RANK_VALUE_MAP = {rank: i for i, rank in enumerate(Rank, 1)}
 
 def ranks_to_decimals(ranks: list[Rank]) -> float:
     """Converts first rank to first 2 significant decimals, 
@@ -25,6 +25,6 @@ def to_rounded_decimal_position(val: int, pos: int) -> float:
     return round(decimal, 16)
 
 def get_tie_break_values_high_card(hand: list[Card]) -> float:
-    hand_desc_sort = hand.sort(key=lambda x: RANK_VALUE_MAP[Rank(x.rank)], reverse=True)
-    return hand_desc_sort
-    return ranks_to_decimals(hand_desc_sort)
+    hand_ranks_desc = [card.rank for card in sorted(hand, reverse=True)]
+    # return hand_desc_sort
+    return ranks_to_decimals(hand_ranks_desc)
