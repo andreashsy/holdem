@@ -26,5 +26,31 @@ def to_rounded_decimal_position(val: int, pos: int) -> float:
 
 def get_tie_break_values_high_card(hand: list[Card]) -> float:
     hand_ranks_desc = [card.rank for card in sorted(hand, reverse=True)]
-    # return hand_desc_sort
     return ranks_to_decimals(hand_ranks_desc)
+
+def get_tie_break_values_pair(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_2_pair(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_3_of_a_kind(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_straight(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_flush(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_full_house(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_four_of_a_kind(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_straight_flush(hand: list[Card]) -> float:
+    pass
+
+def get_tie_break_values_royal_flush(hand: list[Card]) -> float:
+    return 0.0 # all royal flushes are equal

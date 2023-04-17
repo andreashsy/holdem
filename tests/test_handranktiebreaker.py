@@ -2,7 +2,19 @@ import pytest
 from models.CardGenerator import generate_cards
 
 from models.Rank import Rank
-from models.HandRankTieBreaker import get_tie_break_values_high_card, ranks_to_decimals, to_rounded_decimal_position
+from models.HandRankTieBreaker import (
+    ranks_to_decimals,
+    to_rounded_decimal_position,
+    get_tie_break_values_high_card,
+    get_tie_break_values_pair,
+    get_tie_break_values_2_pair,
+    get_tie_break_values_3_of_a_kind,
+    get_tie_break_values_straight,
+    get_tie_break_values_flush,
+    get_tie_break_values_full_house,
+    get_tie_break_values_four_of_a_kind,
+    get_tie_break_values_straight_flush
+)
 
 def test_ranks_to_decimals_raises_value_error_if_not_ranks():
     with pytest.raises(ValueError):
