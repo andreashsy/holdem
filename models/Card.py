@@ -1,6 +1,8 @@
+from dataclasses import dataclass
+
 from models.Rank import Rank
 from models.Suit import Suit
-from dataclasses import dataclass
+from models.Constants import RANK_VALUE_MAP
 
 @dataclass(frozen=True, slots=True)
 class Card:
@@ -18,3 +20,6 @@ class Card:
 
     def __repr__(self) -> str:
         return f'{self.rank.value}{self.suit.value}'
+    
+    def __lt__(self, other) -> bool:
+        return RANK_VALUE_MAP[self.rank] < RANK_VALUE_MAP[other.rank]
