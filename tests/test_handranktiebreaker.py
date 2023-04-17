@@ -7,6 +7,10 @@ def test_ranks_to_decimals_raises_value_error_if_not_ranks():
     with pytest.raises(ValueError):
         ranks_to_decimals(['a', 'k'])
 
+def test_ranks_to_decimals_raises_value_error_if_more_than_8_ranks():
+    with pytest.raises(ValueError):
+        ranks_to_decimals([Rank.TWO] * 9)
+
 def test_ranks_to_decimals_returns_RankTWO_correctly():
     assert ranks_to_decimals([Rank.TWO]) == 0.01
 
@@ -16,8 +20,11 @@ def test_ranks_to_decimals_returns_RankSEVEN_correctly():
 def test_ranks_to_decimals_returns_RankACE_correctly():
     assert ranks_to_decimals([Rank.ACE]) == 0.13
 
+def test_ranks_to_decimals_returns_8_ranks_correctly():
+    assert ranks_to_decimals([Rank.ACE, Rank.TWO, Rank.FOUR, Rank.JACK, Rank.SIX, Rank.KING, Rank.QUEEN, Rank.TEN]) == 0.1301031005121109
 
-
+def test_ranks_to_decimals_returns_5_ranks_correctly():
+    assert ranks_to_decimals([Rank.THREE, Rank.FIVE, Rank.EIGHT, Rank.FOUR, Rank.NINE]) == 0.0204070308
 
 def test_to_rounded_decimal_position_raises_value_error_if_position_more_than_8():
     with pytest.raises(ValueError):
