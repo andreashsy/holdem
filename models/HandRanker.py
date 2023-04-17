@@ -18,7 +18,7 @@ class HandRanker:
         self.is_hand_flush: bool = False
         self.is_hand_straight: bool = False
         self.rank_histogram: list[int] = []
-        self.highest_rank: str = ""
+        self.highest_rank: Rank = None
         self.hand_rank: HandRank = None
         self.tie_break_value: float = 0.0
 
@@ -38,7 +38,7 @@ class HandRanker:
         return len(set(hand_suits)) == 1
 
     def _is_straight(self) -> bool:
-        rank_order = ['a'] + [member.value for member in Rank]
+        rank_order = [Rank('a')] + [member for member in Rank]
         hand_size = len(self.hand)
         valid_straights = [set(rank_order[i: i + hand_size]) for i in range(len(rank_order) - hand_size + 1)]
         ranks = [card.rank for card in self.hand]
@@ -49,8 +49,8 @@ class HandRanker:
         return sorted([count for count in Counter(ranks).values()], reverse=True)
     
     @staticmethod
-    def find_highest_rank(cards: list[Card]) -> str:
-        rank_order = [member.value for member in Rank]
+    def find_highest_rank(cards: list[Card]) -> Rank:
+        rank_order = [member for member in Rank]
         ranks = [card.rank for card in cards]
         max_idx = 0
         for rank in ranks:
@@ -58,13 +58,14 @@ class HandRanker:
         return rank_order[max_idx]
     
     def _calculate_tie_break_value(self) -> float:
-        return TIE_BREAKER_MAP[self.hand_rank](self.hand)
+        return 0.0
+        # return TIE_BREAKER_MAP[self.hand_rank](self.hand)
 
     def calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
             raise Exception('Hand stats not initialised')
         
-        if self.is_hand_flush and self.is_hand_straight and self.highest_rank == 'a':
+        if self.is_hand_flush and self.is_hand_straight and self.highest_rank == Rank('a'):
             return HandRank.ROYAL_FLUSH
         elif self.is_hand_flush and self.is_hand_straight:
             return HandRank.STRAIGHT_FLUSH

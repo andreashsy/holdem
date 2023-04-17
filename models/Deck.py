@@ -1,10 +1,11 @@
 import random
 from models.Card import Card
-from models.Constants import CARD_SUITS, CARD_RANKS
+from models.Rank import Rank
+from models.Suit import Suit
 
 class Deck:
     def __init__(self) -> None:
-        self.cards = [Card(r, s) for r in CARD_RANKS for s in CARD_SUITS]
+        self.cards = [Card(r, s) for r in Rank for s in Suit]
 
     def get_cards(self) -> list[Card]:
         return self.cards.copy()

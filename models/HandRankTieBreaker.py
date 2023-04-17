@@ -25,4 +25,6 @@ def to_rounded_decimal_position(val: int, pos: int) -> float:
     return round(decimal, 16)
 
 def get_tie_break_values_high_card(hand: list[Card]) -> float:
-    pass
+    hand_desc_sort = hand.sort(key=lambda x: RANK_VALUE_MAP[Rank(x.rank)], reverse=True)
+    return hand_desc_sort
+    return ranks_to_decimals(hand_desc_sort)

@@ -2,6 +2,7 @@ import pytest
 from models.HandRanker import HandRanker
 from models.HandRank import HandRank
 from models.CardGenerator import generate_cards
+from models.Rank import Rank
 
 def test_handranker_raises_error_when_not_initialized_with_5_cards():
     card1, card2, card3, card4, card5, card6 = generate_cards(['2h', '3d', '4d', '5d', '6d', '7d'])
@@ -60,10 +61,10 @@ def test_handranker_generate_rank_histogram_generates_correctly():
     assert HandRanker(generate_cards(['2c', '2h', '2s', '5c', '2d']))._generate_rank_histogram() == [4, 1]
 
 def test_handranker_find_highest_rank_generates_correctly():
-    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', '2s', '5c', '2d'])) == '5'
-    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', 'ts', '5c', '2d'])) == 't'
-    assert HandRanker.find_highest_rank(generate_cards(['2c', 'ah', 'as', '5c', '2d'])) == 'a'
-    assert HandRanker.find_highest_rank(generate_cards(['2c', 'jh', 'ts', 'jc', 'jd'])) == 'j'
+    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', '2s', '5c', '2d'])) == Rank('5')
+    assert HandRanker.find_highest_rank(generate_cards(['2c', '2h', 'ts', '5c', '2d'])) == Rank('t')
+    assert HandRanker.find_highest_rank(generate_cards(['2c', 'ah', 'as', '5c', '2d'])) == Rank('a')
+    assert HandRanker.find_highest_rank(generate_cards(['2c', 'jh', 'ts', 'jc', 'jd'])) == Rank('j')
 
 def test_handranker_update_hand_stats_highcard_generates_correctly():
     hr_flush = HandRanker(generate_cards(['3c', '4d', '5c', '6c', '9c']))
@@ -73,7 +74,7 @@ def test_handranker_update_hand_stats_highcard_generates_correctly():
     assert hr_flush.is_hand_flush == False
     assert hr_flush.is_hand_straight == False
     assert hr_flush.rank_histogram == [1, 1, 1, 1, 1]
-    assert hr_flush.highest_rank == '9'
+    assert hr_flush.highest_rank == Rank('9')
 
 def test_handranker_update_hand_stats_flush_generates_correctly():
     hr_flush = HandRanker(generate_cards(['3c', '4c', '5c', '6c', '9c']))
@@ -83,7 +84,7 @@ def test_handranker_update_hand_stats_flush_generates_correctly():
     assert hr_flush.is_hand_flush == True
     assert hr_flush.is_hand_straight == False
     assert hr_flush.rank_histogram == [1, 1, 1, 1, 1]
-    assert hr_flush.highest_rank == '9'
+    assert hr_flush.highest_rank == Rank('9')
 
 def test_handranker_update_hand_stats_straight_generates_correctly():
     hr_straight = HandRanker(generate_cards(['3c', '4c', '5c', '6c', '7h']))
@@ -93,7 +94,7 @@ def test_handranker_update_hand_stats_straight_generates_correctly():
     assert hr_straight.is_hand_flush == False
     assert hr_straight.is_hand_straight == True
     assert hr_straight.rank_histogram == [1, 1, 1, 1, 1]
-    assert hr_straight.highest_rank == '7'
+    assert hr_straight.highest_rank == Rank('7')
 
 def test_handranker_update_hand_stats_straight_flush_generates_correctly():
     hr_straight_flush = HandRanker(generate_cards(['3c', '4c', '5c', '6c', '7c']))
@@ -103,7 +104,7 @@ def test_handranker_update_hand_stats_straight_flush_generates_correctly():
     assert hr_straight_flush.is_hand_flush == True
     assert hr_straight_flush.is_hand_straight == True
     assert hr_straight_flush.rank_histogram == [1, 1, 1, 1, 1]
-    assert hr_straight_flush.highest_rank == '7'
+    assert hr_straight_flush.highest_rank == Rank('7')
 
 def test_handranker_update_hand_stats_pair_generates_correctly():
     hr_pair = HandRanker(generate_cards(['3c', '3h', '5c', '6c', '7c']))
@@ -113,7 +114,7 @@ def test_handranker_update_hand_stats_pair_generates_correctly():
     assert hr_pair.is_hand_flush == False
     assert hr_pair.is_hand_straight == False
     assert hr_pair.rank_histogram == [2, 1, 1, 1]
-    assert hr_pair.highest_rank == '7'
+    assert hr_pair.highest_rank == Rank('7')
 
 def test_handranker_update_hand_stats_2_pair_generates_correctly():
     hr_2_pair = HandRanker(generate_cards(['3c', '3h', '5c', '5h', '7c']))
@@ -123,7 +124,7 @@ def test_handranker_update_hand_stats_2_pair_generates_correctly():
     assert hr_2_pair.is_hand_flush == False
     assert hr_2_pair.is_hand_straight == False
     assert hr_2_pair.rank_histogram == [2, 2, 1]
-    assert hr_2_pair.highest_rank == '7'
+    assert hr_2_pair.highest_rank == Rank('7')
 
 def test_handranker_update_hand_stats_3_of_a_kind_generates_correctly():
     hr_3_kind = HandRanker(generate_cards(['3c', '3h', '3s', '5h', '7c']))
@@ -133,7 +134,7 @@ def test_handranker_update_hand_stats_3_of_a_kind_generates_correctly():
     assert hr_3_kind.is_hand_flush == False
     assert hr_3_kind.is_hand_straight == False
     assert hr_3_kind.rank_histogram == [3, 1, 1]
-    assert hr_3_kind.highest_rank == '7'
+    assert hr_3_kind.highest_rank == Rank('7')
 
 def test_handranker_update_hand_stats_full_house_generates_correctly():
     hr_full_house = HandRanker(generate_cards(['3c', '3h', '3s', '5h', '5c']))
@@ -143,7 +144,7 @@ def test_handranker_update_hand_stats_full_house_generates_correctly():
     assert hr_full_house.is_hand_flush == False
     assert hr_full_house.is_hand_straight == False
     assert hr_full_house.rank_histogram == [3, 2]
-    assert hr_full_house.highest_rank == '5'
+    assert hr_full_house.highest_rank == Rank('5')
 
 def test_handranker_update_hand_stats_4_of_a_kind_generates_correctly():
     hr_4_kind = HandRanker(generate_cards(['5c', '3h', '3s', '3d', '3c']))
@@ -153,7 +154,7 @@ def test_handranker_update_hand_stats_4_of_a_kind_generates_correctly():
     assert hr_4_kind.is_hand_flush == False
     assert hr_4_kind.is_hand_straight == False
     assert hr_4_kind.rank_histogram == [4, 1]
-    assert hr_4_kind.highest_rank == '5'
+    assert hr_4_kind.highest_rank == Rank('5')
 
 def test_handranker_calculate_hand_rank_throws_error_if_stats_not_updated():
     with pytest.raises(Exception):
