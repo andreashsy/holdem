@@ -4,7 +4,18 @@ from typing import Callable
 from models.Card import Card
 from models.Rank import Rank
 from models.HandRank import HandRank
-from models.HandRankTieBreaker import get_tie_break_values_high_card
+from models.HandRankTieBreaker import (
+    get_tie_break_values_high_card,
+    get_tie_break_values_pair,
+    get_tie_break_values_2_pair,
+    get_tie_break_values_3_of_a_kind,
+    get_tie_break_values_straight,
+    get_tie_break_values_flush,
+    get_tie_break_values_full_house,
+    get_tie_break_values_4_of_a_kind,
+    get_tie_break_values_straight_flush,
+    get_tie_break_values_royal_flush
+)
 
 class HandRanker:
     def __init__(self, hand: list[Card]) -> None:
@@ -58,8 +69,7 @@ class HandRanker:
         return rank_order[max_idx]
     
     def _calculate_tie_break_value(self) -> float:
-        return 0.0
-        # return TIE_BREAKER_MAP[self.hand_rank](self.hand)
+        return TIE_BREAKER_MAP[self.hand_rank](self.hand)
 
     def calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
@@ -90,21 +100,13 @@ HandRankTieBreakerCalculator = Callable[[list[Card]], float]
 
 TIE_BREAKER_MAP: dict[HandRank, HandRankTieBreakerCalculator] = {
     HandRank.HIGH_CARD: get_tie_break_values_high_card,
+    HandRank.PAIR: get_tie_break_values_pair,
+    HandRank.TWO_PAIRS: get_tie_break_values_2_pair,
+    HandRank.THREE_OF_A_KIND: get_tie_break_values_3_of_a_kind,
+    HandRank.STRAIGHT: get_tie_break_values_straight,
+    HandRank.FLUSH: get_tie_break_values_flush,
+    HandRank.FULL_HOUSE: get_tie_break_values_full_house,
+    HandRank.FOUR_OF_A_KIND: get_tie_break_values_4_of_a_kind,
+    HandRank.STRAIGHT_FLUSH: get_tie_break_values_straight_flush,
+    HandRank.ROYAL_FLUSH: get_tie_break_values_royal_flush
 }
-
-# TODO: add tie breaker returns decimals 
-
-# Poker hand strengths in order, from best to worst - 
-# Royal Flush - Same suit, running rank from A - T
-# Straight Flush - Flush + straight
-# 4 of a kind - 4 cards of same rank
-# Full house - 3 cards of same rank + pair
-# Flush - 5 cards of same suit
-# Straight - 5 consecutive cards
-# 3 of a kind - 3 cards of the same rank
-# 2 pairs - 2 of 2 cards of same rank
-# Pair - 2 cards of same rank
-# High Card - Highest rank card
-
-# Use flags and rank counts, then determine best hand though waterfall logic
-# http://nsayer.blogspot.com/2007/07/algorithm-for-evaluating-poker-hands.html

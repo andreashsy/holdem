@@ -12,7 +12,7 @@ from models.HandRankTieBreaker import (
     get_tie_break_values_straight,
     get_tie_break_values_flush,
     get_tie_break_values_full_house,
-    get_tie_break_values_four_of_a_kind,
+    get_tie_break_values_4_of_a_kind,
     get_tie_break_values_straight_flush,
     get_tie_break_values_royal_flush
 )
@@ -103,10 +103,10 @@ def test_get_tie_break_values_full_house_returns_correct_value():
 
     assert get_tie_break_values_full_house(hand) == 0.0812
 
-def test_get_tie_break_values_four_of_a_kind_returns_correct_value():
+def test_get_tie_break_values_4_of_a_kind_returns_correct_value():
     hand = generate_cards(['4c', '4s', 'qc', '4h', '4d'])
 
-    assert get_tie_break_values_four_of_a_kind(hand) == 0.0311
+    assert get_tie_break_values_4_of_a_kind(hand) == 0.0311
 
 def test_get_tie_break_values_straight_flush_returns_correct_value():
     hand = generate_cards(['9c', 'tc', 'jc', '8c', 'qc'])

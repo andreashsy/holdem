@@ -60,7 +60,7 @@ def get_tie_break_values_full_house(hand: list[Card]) -> float:
     pair = list(set([r for r in ranks if ranks.count(r) == 2]))
     return ranks_to_decimals(triplet + pair)
 
-def get_tie_break_values_four_of_a_kind(hand: list[Card]) -> float:
+def get_tie_break_values_4_of_a_kind(hand: list[Card]) -> float:
     ranks = [card.rank for card in hand]
     quadruplet = list(set([r for r in ranks if ranks.count(r) == 4]))
     single = list(set([r for r in ranks if ranks.count(r) == 1]))
