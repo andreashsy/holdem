@@ -22,4 +22,6 @@ class Card:
         return f'{self.rank.value}{self.suit.value}'
     
     def __lt__(self, other) -> bool:
+        if not isinstance(other, Card):
+            raise NotImplementedError(f'Card cannot be compared with {type(other)}')
         return RANK_VALUE_MAP[self.rank] < RANK_VALUE_MAP[other.rank]
