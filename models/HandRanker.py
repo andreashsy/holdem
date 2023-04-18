@@ -32,6 +32,9 @@ class HandRanker:
         self.highest_rank: Rank = None
         self.hand_rank: HandRank = None
         self.tie_break_value: float = 0.0
+    
+    def calculate_hand_value(self) -> float:
+        return self.hand_rank.value + self.tie_break_value
 
     def get_hand_rank(self) -> HandRank:
         return self.hand_rank
@@ -41,7 +44,7 @@ class HandRanker:
         self.is_hand_straight = self._is_straight()
         self.rank_histogram = self._generate_rank_histogram()
         self.highest_rank = self.find_highest_rank(self.hand)
-        self.hand_rank = self.calculate_hand_rank()
+        self.hand_rank = self._calculate_hand_rank()
         self.tie_break_value = self._calculate_tie_break_value()
  
     def _is_flush(self) -> bool:
@@ -71,7 +74,7 @@ class HandRanker:
     def _calculate_tie_break_value(self) -> float:
         return TIE_BREAKER_MAP[self.hand_rank](self.hand)
 
-    def calculate_hand_rank(self) -> HandRank:
+    def _calculate_hand_rank(self) -> HandRank:
         if not (self.rank_histogram and self.highest_rank):
             raise Exception('Hand stats not initialised')
         
