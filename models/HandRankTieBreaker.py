@@ -29,28 +29,46 @@ def get_tie_break_values_high_card(hand: list[Card]) -> float:
     return ranks_to_decimals(hand_ranks_desc)
 
 def get_tie_break_values_pair(hand: list[Card]) -> float:
-    pass
+    ranks = [card.rank for card in hand]
+    pair_rank = list(set([r for r in ranks if ranks.count(r) == 2]))
+    non_pairs_desc = sorted([r for r in ranks if ranks.count(r) == 1], reverse=True)
+    return ranks_to_decimals(pair_rank + non_pairs_desc)
 
 def get_tie_break_values_2_pair(hand: list[Card]) -> float:
-    pass
+    ranks = [card.rank for card in hand]
+    pairs = sorted(set([r for r in ranks if ranks.count(r) == 2]), reverse=True)
+    non_pair = [r for r in ranks if ranks.count(r) == 1]
+    return ranks_to_decimals(pairs + non_pair)
 
 def get_tie_break_values_3_of_a_kind(hand: list[Card]) -> float:
-    pass
+    ranks = [card.rank for card in hand]
+    triplet = list(set([r for r in ranks if ranks.count(r) == 3]))
+    non_pair = sorted([r for r in ranks if ranks.count(r) == 1], reverse=True)
+    return ranks_to_decimals(triplet + non_pair)
 
 def get_tie_break_values_straight(hand: list[Card]) -> float:
-    pass
+    sorted_ranks = [card.rank for card in sorted(hand, reverse=True)]
+    return ranks_to_decimals(sorted_ranks[:1])
 
 def get_tie_break_values_flush(hand: list[Card]) -> float:
-    pass
+    hand_ranks_desc = [card.rank for card in sorted(hand, reverse=True)]
+    return ranks_to_decimals(hand_ranks_desc)
 
 def get_tie_break_values_full_house(hand: list[Card]) -> float:
-    pass
+    ranks = [card.rank for card in hand]
+    triplet = list(set([r for r in ranks if ranks.count(r) == 3]))
+    pair = list(set([r for r in ranks if ranks.count(r) == 2]))
+    return ranks_to_decimals(triplet + pair)
 
 def get_tie_break_values_four_of_a_kind(hand: list[Card]) -> float:
-    pass
+    ranks = [card.rank for card in hand]
+    quadruplet = list(set([r for r in ranks if ranks.count(r) == 4]))
+    single = list(set([r for r in ranks if ranks.count(r) == 1]))
+    return ranks_to_decimals(quadruplet + single)
 
 def get_tie_break_values_straight_flush(hand: list[Card]) -> float:
-    pass
+    sorted_ranks = [card.rank for card in sorted(hand, reverse=True)]
+    return ranks_to_decimals(sorted_ranks[:1])
 
 def get_tie_break_values_royal_flush(hand: list[Card]) -> float:
     return 0.0 # all royal flushes are equal

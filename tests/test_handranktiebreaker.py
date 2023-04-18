@@ -13,7 +13,8 @@ from models.HandRankTieBreaker import (
     get_tie_break_values_flush,
     get_tie_break_values_full_house,
     get_tie_break_values_four_of_a_kind,
-    get_tie_break_values_straight_flush
+    get_tie_break_values_straight_flush,
+    get_tie_break_values_royal_flush
 )
 
 def test_ranks_to_decimals_raises_value_error_if_not_ranks():
@@ -71,3 +72,48 @@ def test_get_tie_break_values_high_card_returns_correct_value():
     hand = generate_cards(['9c', '2h', '8s', 'qc', 'td'])
 
     assert get_tie_break_values_high_card(hand) == 0.1109080701
+
+def test_get_tie_break_values_pair_returns_correct_value():
+    hand = generate_cards(['9c', '2h', '2s', 'qc', 'td'])
+
+    assert get_tie_break_values_pair(hand) == 0.01110908
+
+def test_get_tie_break_values_2_pair_returns_correct_value():
+    hand = generate_cards(['9c', '2h', '2s', 'qc', '9d'])
+
+    assert get_tie_break_values_2_pair(hand) == 0.080111
+
+def test_get_tie_break_values_3_of_a_kind_returns_correct_value():
+    hand = generate_cards(['9c', '2h', '9s', 'qc', '9d'])
+
+    assert get_tie_break_values_3_of_a_kind(hand) == 0.081101
+
+def test_get_tie_break_values_straight_returns_correct_value():
+    hand = generate_cards(['9c', 'th', 'js', '8c', '7d'])
+
+    assert get_tie_break_values_straight(hand) == 0.1
+
+def test_get_tie_break_values_flush_returns_correct_value():
+    hand = generate_cards(['ac', '2c', '9c', 'qc', '7c'])
+
+    assert get_tie_break_values_flush(hand) == 0.1311080601
+
+def test_get_tie_break_values_full_house_returns_correct_value():
+    hand = generate_cards(['kc', 'ks', '9c', '9h', '9d'])
+
+    assert get_tie_break_values_full_house(hand) == 0.0812
+
+def test_get_tie_break_values_four_of_a_kind_returns_correct_value():
+    hand = generate_cards(['4c', '4s', 'qc', '4h', '4d'])
+
+    assert get_tie_break_values_four_of_a_kind(hand) == 0.0311
+
+def test_get_tie_break_values_straight_flush_returns_correct_value():
+    hand = generate_cards(['9c', 'tc', 'jc', '8c', 'qc'])
+
+    assert get_tie_break_values_straight_flush(hand) == 0.11
+
+def test_get_tie_break_values_royal_flush_returns_correct_value():
+    hand = generate_cards(['ac', 'tc', 'jc', 'kc', 'qc'])
+
+    assert get_tie_break_values_royal_flush(hand) == 0.0
