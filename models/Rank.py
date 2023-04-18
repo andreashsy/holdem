@@ -24,3 +24,9 @@ class Rank(Enum):
             raise NotImplementedError(f'Rank cannot be with {type(other)}')
         member_list = self.__class__._member_list()
         return member_list.index(self) < member_list.index(other)
+    
+    def __gt__(self, other):
+        if not isinstance(other, Rank):
+            raise NotImplementedError(f'Rank cannot be with {type(other)}')
+        member_list = self.__class__._member_list()
+        return member_list.index(self) > member_list.index(other)

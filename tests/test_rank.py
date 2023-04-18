@@ -1,4 +1,15 @@
+import pytest
 from models.Rank import Rank
+
+def test_rank_raises_error_when_compared_with_non_ranks():
+    with pytest.raises(NotImplementedError):
+        Rank('a') > 1
+    with pytest.raises(NotImplementedError):
+        Rank('a') > 'a'
+    with pytest.raises(NotImplementedError):
+        Rank('a') < None
+    with pytest.raises(NotImplementedError):
+        Rank('a') < False
 
 def test_rank_can_be_ordered():
     assert Rank('a') > Rank('k')

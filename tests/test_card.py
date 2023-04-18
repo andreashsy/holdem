@@ -21,6 +21,18 @@ def test_equality_returns_false_when_not_equal():
     assert Card(Rank('5'), Suit('h')) != Card(Rank('5'), Suit('c'))
     assert Card(Rank('5'), Suit('h')) != Card(Rank('t'), Suit('d'))
 
+def test_card_raises_error_when_compared_with_non_card_types():
+    with pytest.raises(NotImplementedError):
+        Card(Rank('2'), Suit('h')) < 1
+    with pytest.raises(NotImplementedError):
+        Card(Rank('2'), Suit('h')) < 'a'
+    with pytest.raises(NotImplementedError):
+        Card(Rank('2'), Suit('h')) > Rank('2')
+    with pytest.raises(NotImplementedError):
+        Card(Rank('2'), Suit('h')) > None
+    with pytest.raises(NotImplementedError):
+        Card(Rank('2'), Suit('h')) < True
+
 def test_card_comparison_by_rank():
     assert Card(Rank('2'), Suit('h')) < Card(Rank('3'), Suit('c'))
     assert Card(Rank('3'), Suit('h')) < Card(Rank('4'), Suit('c'))

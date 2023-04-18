@@ -25,3 +25,8 @@ class Card:
         if not isinstance(other, Card):
             raise NotImplementedError(f'Card cannot be compared with {type(other)}')
         return RANK_VALUE_MAP[self.rank] < RANK_VALUE_MAP[other.rank]
+    
+    def __gt__(self, other) -> bool:
+        if not isinstance(other, Card):
+            raise NotImplementedError(f'Card cannot be compared with {type(other)}')
+        return RANK_VALUE_MAP[self.rank] > RANK_VALUE_MAP[other.rank]
