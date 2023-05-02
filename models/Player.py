@@ -25,5 +25,15 @@ class HoldemPlayer:
 
     def fold(self) -> None:
         self.is_active = False
+
+    def withdraw_current_bet(self) -> int:
+        current_bet = self.current_bet
         self.current_bet = 0
+        return current_bet
+    
+    def is_current_bet_zero(self) -> bool:
+        return self.current_bet == 0
+    
+    def get_current_bet(self) -> int:
+        return self.current_bet
     # table - 5 cards, player order, player turn, pot size, blinds, min_raise

@@ -103,10 +103,37 @@ def test_holdemplayer_fold_turns_player_inactive():
     
     assert player.is_active == False
 
-def test_holdem_player_fold_reduces_current_bet_to_zero():
+def test_withdraw_current_bet_returns_current_bet():
     player = HoldemPlayer(stack=100)
     player.participate()
-    player.bet(50)
-    player.fold()
+    player.bet(49)
+
+    bet_amount = player.withdraw_current_bet()
+    assert bet_amount == 49
+
+def test_withdraw_current_bet_returns_current_bet():
+    player = HoldemPlayer(stack=100)
+
+    player.participate()
+    player.bet(37)
+    player.withdraw_current_bet()
 
     assert player.current_bet == 0
+
+def test_is_current_bet_zero_returns_correctly():
+    player_zero_bet = HoldemPlayer(stack=100)
+    player_positive_bet = HoldemPlayer(stack=100)
+
+    player_positive_bet.participate()
+    player_positive_bet.bet(34)
+
+    assert player_zero_bet.is_current_bet_zero() == True
+    assert player_positive_bet.is_current_bet_zero() == False
+
+def test_get_current_bet_zero_returns_correctly():
+    player = HoldemPlayer(stack=100)
+
+    player.participate()
+    player.bet(45)
+
+    assert player.get_current_bet() ==  45
