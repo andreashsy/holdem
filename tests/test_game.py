@@ -273,7 +273,7 @@ def test_start_river_causes_community_cards_to_have_5_cards():
 
     assert len(game.get_community_cards()) == 5
 
-def test_advance_button_shifts_2_player_order_correctly():
+def test_advance_button_position_shifts_2_player_order_correctly():
     p1 = HoldemPlayer(stack=5, id="p1")
     p2 = HoldemPlayer(stack=7, id="p2")
     p1.participate()
@@ -281,11 +281,11 @@ def test_advance_button_shifts_2_player_order_correctly():
     players = [p1, p2]
     game = HoldemGameState(players=players)
 
-    game.advance_button()
+    game.advance_button_position()
 
     assert game.players == [p2, p1]
 
-def test_advance_button_shifts_5_player_order_correctly():
+def test_advance_button_position_shifts_5_player_order_correctly():
     p1 = HoldemPlayer(stack=5, id="p1")
     p2 = HoldemPlayer(stack=7, id="p2")
     p3 = HoldemPlayer(stack=7, id="p3")
@@ -299,7 +299,7 @@ def test_advance_button_shifts_5_player_order_correctly():
     players = [p1, p2, p3, p4, p5]
     game = HoldemGameState(players=players)
 
-    game.advance_button()
+    game.advance_button_position()
 
     assert game.players == [p2, p3, p4, p5, p1]
 

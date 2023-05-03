@@ -20,7 +20,7 @@ class HoldemGameState:
         if self.phase == HoldemGamePhase.PREGAME:
             self.shuffle_players()
         elif self.phase == HoldemGamePhase.SHOWDOWN:
-            self.advance_button()
+            self.advance_button_position()
         else: 
             raise ValueError(f"Game phase must be pregame or showdown. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.PREFLOP
@@ -47,12 +47,13 @@ class HoldemGameState:
     def start_showdown(self) -> None:
         if not self.phase == HoldemGamePhase.RIVER: raise ValueError(f"Game must be in river. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.SHOWDOWN
+        #TODO reveal aggressor and winning hand, pot to winner
 
     def initiate_betting_round(self) -> None:
+        #TODO make sure everone moves at least once, all active bets are the same, if only one active then winner
         pass
 
-
-    def advance_button(self) -> None:
+    def advance_button_position(self) -> None:
         self.players = self.players[1:] + [self.players[0]]
 
     def prepare_deck(self) -> None:
