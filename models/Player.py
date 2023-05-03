@@ -2,12 +2,13 @@ from models.Card import Card
 
 
 class HoldemPlayer:
-    def __init__(self, stack: int) -> None:
+    def __init__(self, stack: int, id: str = "") -> None:
         if stack <= 0: raise ValueError("Player's stack must be positive")
         self.stack: int = stack
         self.hole_cards: list[Card] = []
         self.is_active: bool = False
         self.current_bet: int = 0
+        self.id: str = id
 
     def participate(self) -> None:
         self.is_active = True
@@ -36,4 +37,7 @@ class HoldemPlayer:
     
     def get_current_bet(self) -> int:
         return self.current_bet
+    
+    def get_id(self) -> str:
+        return self.id
     # table - 5 cards, player order, player turn, pot size, blinds, min_raise
