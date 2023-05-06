@@ -48,6 +48,8 @@ def get_tie_break_values_3_of_a_kind(hand: list[Card]) -> float:
 
 def get_tie_break_values_straight(hand: list[Card]) -> float:
     sorted_ranks = [card.rank for card in sorted(hand, reverse=True)]
+    if all(rank in sorted_ranks for rank in [Rank.ACE, Rank.FIVE]):
+        return ranks_to_decimals([Rank.FIVE])
     return ranks_to_decimals(sorted_ranks[:1])
 
 def get_tie_break_values_flush(hand: list[Card]) -> float:
@@ -68,6 +70,8 @@ def get_tie_break_values_4_of_a_kind(hand: list[Card]) -> float:
 
 def get_tie_break_values_straight_flush(hand: list[Card]) -> float:
     sorted_ranks = [card.rank for card in sorted(hand, reverse=True)]
+    if all(rank in sorted_ranks for rank in [Rank.ACE, Rank.FIVE]):
+        return ranks_to_decimals([Rank.FIVE])
     return ranks_to_decimals(sorted_ranks[:1])
 
 def get_tie_break_values_royal_flush(hand: list[Card]) -> float:

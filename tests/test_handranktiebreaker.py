@@ -93,6 +93,11 @@ def test_get_tie_break_values_straight_returns_correct_value():
 
     assert get_tie_break_values_straight(hand) == 0.1
 
+def test_get_tie_break_values_straight_returns_correct_value_a2345():
+    hand = generate_cards(['ac', '2h', '3s', '5c', '4d'])
+
+    assert get_tie_break_values_straight(hand) == 0.04
+
 def test_get_tie_break_values_flush_returns_correct_value():
     hand = generate_cards(['ac', '2c', '9c', 'qc', '7c'])
 
@@ -112,6 +117,11 @@ def test_get_tie_break_values_straight_flush_returns_correct_value():
     hand = generate_cards(['9c', 'tc', 'jc', '8c', 'qc'])
 
     assert get_tie_break_values_straight_flush(hand) == 0.11
+
+def test_get_tie_break_values_straight_flush_returns_correct_value_a2345():
+    hand = generate_cards(['ac', '2c', '3c', '5c', '4c'])
+
+    assert get_tie_break_values_straight_flush(hand) == 0.04
 
 def test_get_tie_break_values_royal_flush_returns_correct_value():
     hand = generate_cards(['ac', 'tc', 'jc', 'kc', 'qc'])
