@@ -1,3 +1,4 @@
+from models.BettingRound import BettingRound
 from models.Card import Card
 from models.Deck import Deck
 from models.Player import HoldemPlayer
@@ -10,10 +11,10 @@ class HoldemGameState:
         self.players = players
         self.phase = HoldemGamePhase.PREGAME
         self.deck = None
-        self.big_blind = big_blind
+        self.big_blind = big_blind  # big blind position is last in player list
         self.small_blind = small_blind
         self.community_cards = []
-        # self.active_player_index = None
+        self.betting_round = None
 
     def start_preflop(self) -> None:
         if not self.are_all_bets(0): raise ValueError('All bets must be zero')
@@ -27,31 +28,43 @@ class HoldemGameState:
         self.prepare_deck()
         self.pay_blinds()
         self.deal_hole_cards()
+        self.initiate_betting_round()
     
     def start_flop(self) -> None:
         if not self.phase == HoldemGamePhase.PREFLOP: raise ValueError(f"Game must be in preflop. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.FLOP
         card1, card2, card3 = self.deck.draw_card(), self.deck.draw_card(), self.deck.draw_card()
         self.community_cards.extend([card1, card2, card3])
+        self.initiate_betting_round()
 
     def start_turn(self) -> None:
         if not self.phase == HoldemGamePhase.FLOP: raise ValueError(f"Game must be in flop. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.TURN
         self.community_cards.append(self.deck.draw_card())
+        self.initiate_betting_round()
 
     def start_river(self) -> None:
         if not self.phase == HoldemGamePhase.TURN: raise ValueError(f"Game must be in turn. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.RIVER
         self.community_cards.append(self.deck.draw_card())
+        self.initiate_betting_round()
 
     def start_showdown(self) -> None:
         if not self.phase == HoldemGamePhase.RIVER: raise ValueError(f"Game must be in river. Current mode is {self.phase}")
         self.phase = HoldemGamePhase.SHOWDOWN
-        #TODO reveal aggressor and winning hand, pot to winner
+        #TODO reveal aggressor, reveal winning hand, pot to winner
+
+    def get_betting_round(self) -> BettingRound:
+        return self.betting_round
 
     def initiate_betting_round(self) -> None:
-        #TODO make sure everone moves at least once, all active bets are the same, if only one active then winner
-        pass
+        self.betting_round = BettingRound(self.generate_betting_order())
+
+    def generate_betting_order(self) -> list[HoldemPlayer]:
+        if self.phase in [HoldemGamePhase.PREGAME, HoldemGamePhase.SHOWDOWN]: 
+            raise ValueError('No valid order before game starts')
+        if self.phase == HoldemGamePhase.PREFLOP: return self.players
+        return self.players[-2:] + self.players[:-2]
 
     def advance_button_position(self) -> None:
         self.players = self.players[1:] + [self.players[0]]

@@ -471,3 +471,87 @@ def test_are_all_active_bets_one_returns_false_if_one_not_one_and_all_active():
     game = HoldemGameState(players=players)
 
     assert game.are_all_active_bets(1) == False
+
+def test_generate_betting_order_raises_when_pregame_state():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+
+    game.phase = HoldemGamePhase.PREGAME
+
+    with pytest.raises(ValueError):
+        game.generate_betting_order()
+
+def test_generate_betting_order_raises_when_showdown_state():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+
+    game.phase = HoldemGamePhase.SHOWDOWN
+
+    with pytest.raises(ValueError):
+        game.generate_betting_order()
+
+def test_generate_betting_order_generates_preflop_correctly():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+    
+    game.phase = HoldemGamePhase.PREFLOP
+    player_order = game.generate_betting_order()
+
+    assert player_order == [p1, p2, p3, p4, p5]
+
+def test_generate_betting_order_generates_flop_correctly():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+    
+    game.phase = HoldemGamePhase.FLOP
+    player_order = game.generate_betting_order()
+
+    assert player_order == [p4, p5, p1, p2, p3]
+
+def test_generate_betting_order_generates_turn_correctly():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+    
+    game.phase = HoldemGamePhase.TURN
+    player_order = game.generate_betting_order()
+
+    assert player_order == [p4, p5, p1, p2, p3]
+
+def test_generate_betting_order_generates_river_correctly():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+    
+    game.phase = HoldemGamePhase.RIVER
+    player_order = game.generate_betting_order()
+
+    assert player_order == [p4, p5, p1, p2, p3]
