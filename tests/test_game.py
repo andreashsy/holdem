@@ -1,4 +1,5 @@
 import pytest
+from models.CardGenerator import generate_cards
 
 from models.Game import HoldemGameState
 from models.Player import HoldemPlayer
@@ -555,3 +556,134 @@ def test_generate_betting_order_generates_river_correctly():
     player_order = game.generate_betting_order()
 
     assert player_order == [p4, p5, p1, p2, p3]
+
+def test_move_player_bets_to_pot_moves_all_bets_to_pot():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    p1.participate()
+    p2.participate()
+    p3.participate()
+    p4.participate()
+    p5.participate()
+    p1.bet(1)
+    p2.bet(2)
+    p3.bet(3)
+    p4.bet(4)
+    p5.bet(6)
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+
+    game.move_player_bets_to_pot()
+
+    assert game.pot == 1 + 2 + 3 + 4 + 6
+
+def test_move_player_bets_to_pot_changes_all_player_bets_to_zero():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p4 = HoldemPlayer(stack=7, id="p4")
+    p5 = HoldemPlayer(stack=7, id="p5")
+    p1.participate()
+    p2.participate()
+    p3.participate()
+    p4.participate()
+    p5.participate()
+    p1.bet(1)
+    p2.bet(2)
+    p3.bet(3)
+    p4.bet(4)
+    p5.bet(6)
+    players = [p1, p2, p3, p4, p5]
+    game = HoldemGameState(players=players)
+
+    game.move_player_bets_to_pot()
+
+    assert p1.get_current_bet() == 0
+    assert p2.get_current_bet() == 0
+    assert p3.get_current_bet() == 0
+    assert p4.get_current_bet() == 0
+    assert p5.get_current_bet() == 0
+
+def test_get_active_player_hand_strengths_raises_if_not_showdown():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    players = [p1, p2]
+    game = HoldemGameState(players=players)
+    
+    game.phase = HoldemGamePhase.PREGAME
+    with pytest.raises(ValueError):
+        game.get_active_player_hand_strengths()
+
+    game.phase = HoldemGamePhase.PREFLOP
+    with pytest.raises(ValueError):
+        game.get_active_player_hand_strengths()
+
+    game.phase = HoldemGamePhase.FLOP
+    with pytest.raises(ValueError):
+        game.get_active_player_hand_strengths()
+
+    game.phase = HoldemGamePhase.TURN
+    with pytest.raises(ValueError):
+        game.get_active_player_hand_strengths()
+
+    game.phase = HoldemGamePhase.RIVER
+    with pytest.raises(ValueError):
+        game.get_active_player_hand_strengths()
+
+def test_get_active_player_hand_strengths_returns_only_active_player_hand_strengths():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p1.participate()
+    p3.participate()
+    players = [p1, p2, p3]
+    game = HoldemGameState(players=players)    
+    
+    game.phase = HoldemGamePhase.SHOWDOWN
+    p1.hole_cards = generate_cards(['ah', 'as'])
+    p2.hole_cards = generate_cards(['7d', '7s'])
+    p3.hole_cards = generate_cards(['5h', '6h'])
+    game.community_cards = generate_cards(['ad', '2s', '4h', '3s', 'kh'])
+    result = game.get_active_player_hand_strengths()
+
+    assert result == [('p1', 4.131203), ('p3', 5.05)]
+
+def test_determine_winner_returns_correct_winner():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p1.participate()
+    p3.participate()
+    players = [p1, p2, p3]
+    game = HoldemGameState(players=players)    
+    
+    game.phase = HoldemGamePhase.SHOWDOWN
+    p1.hole_cards = generate_cards(['ah', 'as'])
+    p2.hole_cards = generate_cards(['7d', '7s'])
+    p3.hole_cards = generate_cards(['5h', '6h'])
+    game.community_cards = generate_cards(['ad', '2s', '4h', '3s', 'kh'])
+    winner = game.determine_winners()
+
+    assert winner == [p3]
+
+def test_determine_winner_returns_correct_winners_if_draw():
+    p1 = HoldemPlayer(stack=5, id="p1")
+    p2 = HoldemPlayer(stack=7, id="p2")
+    p3 = HoldemPlayer(stack=7, id="p3")
+    p1.participate()
+    p2.participate()
+    p3.participate()
+    players = [p1, p2, p3]
+    game = HoldemGameState(players=players)    
+    
+    game.phase = HoldemGamePhase.SHOWDOWN
+    p1.hole_cards = generate_cards(['ah', 'as'])
+    p2.hole_cards = generate_cards(['5d', '6s'])
+    p3.hole_cards = generate_cards(['5h', '6h'])
+    game.community_cards = generate_cards(['ad', '2s', '4h', '3s', 'kh'])
+    winner = game.determine_winners()
+
+    assert set(winner) == set([p2, p3])
